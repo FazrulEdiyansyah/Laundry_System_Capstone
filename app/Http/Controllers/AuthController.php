@@ -21,7 +21,15 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('customer.dashboard'));
+
+            $user = Auth::user();
+
+            // 🔥 Redirect berdasarkan role
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('customer.dashboard');
         }
 
         return back()->withErrors([
@@ -47,18 +55,18 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'whatsapp' => ['required', 'string', 'max:20'],        // Field baru
-            'address' => ['required', 'string', 'max:500'],        // Field baru
+            'whatsapp' => ['required', 'string', 'max:20'],
+            'address' => ['required', 'string', 'max:500'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
         $user = \App\Models\User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'whatsapp' => $validated['whatsapp'],      // Simpan whatsapp
-            'address' => $validated['address'],        // Simpan address
-            'password' => bcrypt($validated['password']),
-            'role' => 'customer',
+            'name'      => $validated['name'],
+            'email'     => $validated['email'],
+            'whatsapp'  => $validated['whatsapp'],
+            'address'   => $validated['address'],
+            'password'  => bcrypt($validated['password']),
+            'role'      => 'customer', // tetap customer
         ]);
 
         Auth::login($user);

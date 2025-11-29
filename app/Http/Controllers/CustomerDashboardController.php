@@ -64,8 +64,9 @@ class CustomerDashboardController extends Controller
 
     public function show($id)
     {
-        $order = Order::where('user_id', auth()->id())->findOrFail($id);
-        return view('customer.order.show', compact('order'));
+        $order = \App\Models\Order::where('user_id', auth()->id())->findOrFail($id);
+
+        return view('customer.order-show', compact('order'));
     }
 
     public function tracking($id)

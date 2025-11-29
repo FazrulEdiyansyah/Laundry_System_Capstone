@@ -28,8 +28,10 @@
     <main>
         @yield('content')
     </main>
-    <footer class="bg-white mt-12 py-4 shadow text-center text-gray-500">
-        &copy; {{ date('Y') }} Laundry Management System
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; {{ date('Y') }} TempatCuciIbuk. All rights reserved.</p>
+        </div>
     </footer>
     <script>
         // Tulis JS langsung di sini
